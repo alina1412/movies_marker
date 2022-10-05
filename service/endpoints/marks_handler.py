@@ -9,6 +9,12 @@ from service.endpoints.utils import AlreadyAddedError, NoUserError
 from service.schemas.marks import MarkInputSchema
 from service.utils.logic import add_mark, change_mark
 
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
+
 api_router = APIRouter(
     prefix="/marks",
     tags=["marks"],
@@ -17,12 +23,12 @@ api_router = APIRouter(
 
 @api_router.post(
     "/add-mark",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User not found"},
         status.HTTP_409_CONFLICT: {
-            "description": "mark had been added, use change method"
+            "description": "This mark had been added, use 'change' method"
         },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
     },
@@ -32,20 +38,20 @@ async def add_mark_handler(
     input_mark: MarkInputSchema,
     session: AsyncSession = Depends(get_session),
 ):
-    """ """
+    """ Add a mark for a movie """
     try:
         await add_mark(session, input_mark.dict())
         return
     except NoUserError:
-        print("---NoUserError")
+        logger.debug(f"---NoUserError")
         raise HTTPException(status.HTTP_404_NOT_FOUND)
     except AlreadyAddedError:
         raise HTTPException(status.HTTP_409_CONFLICT)
     except IntegrityError:
-        print("---IntegrityError")
+        logger.debug(f"---IntegrityError")
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        print(e)
+        logger.debug(e)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
 
@@ -63,16 +69,16 @@ async def change_mark_handler(
     input_mark: MarkInputSchema,
     session: AsyncSession = Depends(get_session),
 ):
-    """ """
+    """ Change user's existing mark of a movie """
     try:
         await change_mark(session, input_mark.dict())
         return
     except NoUserError:
-        print("---NoUserError")
+        logger.debug("---NoUserError")
         raise HTTPException(status.HTTP_404_NOT_FOUND)
     except IntegrityError:
-        print("---IntegrityError")
+        logger.debug("---IntegrityError")
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        print(e)
+        logger.debug(e)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)

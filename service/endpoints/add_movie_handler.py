@@ -7,6 +7,11 @@ from starlette import status
 from service.db.connection import get_session
 from service.utils.logic import add_movie
 
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
 
 api_router = APIRouter(
     prefix="/movie",
@@ -14,9 +19,9 @@ api_router = APIRouter(
 )
 
 
-@api_router.get(
+@api_router.post(
     "/add-movie",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
@@ -27,13 +32,13 @@ async def add_movie_handler(
     title: str,
     session: AsyncSession = Depends(get_session),
 ):
-    """ add unique title"""
+    """ add a unique title"""
     try:
         await add_movie(session, title)
         return
     except IntegrityError:
-        print("---IntegrityError")
+        logger.debug("---IntegrityError")
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        print(e)
+        logger.debug(e)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
