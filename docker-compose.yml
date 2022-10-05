@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+
+  database:
+    image: 'postgres:latest'
+    container_name: 'movies_marker'
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+      # - '5432:5432'
+    volumes:
+      - ./database_data:/var/lib/postgresql/data
+      
+
