@@ -1,3 +1,3 @@
-from service.schemas.marks import MarkSchema, MarkInputSchema
+from service.schemas.marks import MarkInputSchema, MarkSchema
 
 __all__ = ["MarkSchema", "MarkInputSchema"]

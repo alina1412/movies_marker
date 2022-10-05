@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, Request
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -6,8 +8,6 @@ from starlette import status
 
 from service.db.connection import get_session
 from service.utils.logic import add_movie
-
-import logging
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -32,7 +32,7 @@ async def add_movie_handler(
     title: str,
     session: AsyncSession = Depends(get_session),
 ):
-    """ add a unique title"""
+    """Add a unique title"""
     try:
         await add_movie(session, title)
         return

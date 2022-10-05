@@ -28,20 +28,28 @@ async def prepare_fill(db, user_data, movie_data, mark_data):
         with session.begin():
             # User
             await db_insert(session, User, user_data)
-            res = await db_select(session, (User.id,), (User.name == user_data["name"],))
+            res = await db_select(
+                session, (User.id,), (User.name == user_data["name"],)
+            )
             assert res != []
             user_id = res[0][0]
             print(user_id, "------")
 
             # Movie
             await db_insert(session, Movie, movie_data)
-            res = await db_select(session, (Movie.id,), (Movie.title == movie_data["title"],))
+            res = await db_select(
+                session, (Movie.id,), (Movie.title == movie_data["title"],)
+            )
             assert res != []
             movie_id = res[0][0]
             print(movie_id, "------")
 
             # Marks
-            await db_insert(session, Marks, dict(mark=mark_data["mark"], user=user_id, movie=movie_id))
+            await db_insert(
+                session,
+                Marks,
+                dict(mark=mark_data["mark"], user=user_id, movie=movie_id),
+            )
             res = await db_select(session, (Marks.id,), (Marks.movie == movie_id,))
             assert res != []
 

@@ -1,6 +1,6 @@
-from fastapi.testclient import TestClient
 import pytest
 import sqlalchemy
+from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 
 from service.__main__ import app
@@ -12,7 +12,7 @@ def fixture_client():
     return TestClient(app)
 
 
-class TestSess:
+class TestSession:
     def __init__(self) -> None:
         settings = get_settings()
         engine = sqlalchemy.create_engine(settings.sync_database_uri)
@@ -26,4 +26,4 @@ class TestSess:
 # Fixture for database connection.
 @pytest.fixture(name="db", scope="function")
 def fixture_db():
-    yield TestSess().get_sess()
+    yield TestSession().get_sess()

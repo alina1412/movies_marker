@@ -1,6 +1,3 @@
-from service.schemas.marks import MarkInputSchema
-
-
 class NoUserError(Exception):
     detail: str = "no such user"
 
