@@ -8,3 +8,6 @@ database_data
 alembic.ini
 alembic/*
 migrations/*
+htmlcov/*
+.coverage
+example_*
