@@ -10,18 +10,14 @@ def prepare_fill(db, user_data, movie_data, mark_data):
         with session.begin():
             # User
             db_insert(session, User, user_data)
-            res = db_select(
-                session, (User.id,), (User.name == user_data["name"],)
-            )
+            res = db_select(session, (User.id,), (User.name == user_data["name"],))
             assert res != []
             user_id = res[0][0]
             print(user_id, "------")
 
             # Movie
             db_insert(session, Movie, movie_data)
-            res = db_select(
-                session, (Movie.id,), (Movie.title == movie_data["title"],)
-            )
+            res = db_select(session, (Movie.id,), (Movie.title == movie_data["title"],))
             assert res != []
             movie_id = res[0][0]
             print(movie_id, "------")
