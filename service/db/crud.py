@@ -1,9 +1,6 @@
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from service.db.models import Marks, Movie, User
-from service.schemas.marks import MarkSchema
-
 
 async def db_insert(session: AsyncSession, model, dict_data):
     query = insert(model).values(**dict_data)
@@ -22,7 +19,7 @@ async def db_update(session: AsyncSession, what, condition, new_data):
         stmt = update(*what).where(*condition).values(**new_data)
         await session.execute(stmt)
         # await session.commit()
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
         await session.rollback()
         return False

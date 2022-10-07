@@ -43,15 +43,12 @@ async def add_mark_handler(
         await add_mark(session, input_mark.dict())
         return
     except NoUserError as exc:
-        logger.debug(f"---NoUserError")
+        logger.debug("---NoUserError")
         raise HTTPException(status.HTTP_404_NOT_FOUND) from exc
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
-    except IntegrityError:
-        logger.debug(f"---IntegrityError")
-        raise HTTPException(status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        logger.debug(e)
+    except (IntegrityError, Exception) as exc:
+        logger.debug(exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
 
@@ -76,9 +73,6 @@ async def change_mark_handler(
     except NoUserError:
         logger.debug("---NoUserError")
         raise HTTPException(status.HTTP_404_NOT_FOUND)
-    except IntegrityError:
-        logger.debug("---IntegrityError")
-        raise HTTPException(status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        logger.debug(e)
+    except (IntegrityError, Exception) as exc:
+        logger.debug(exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)

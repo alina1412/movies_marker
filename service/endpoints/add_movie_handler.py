@@ -36,9 +36,6 @@ async def add_movie_handler(
     try:
         await add_movie(session, title)
         return
-    except IntegrityError:
-        logger.debug("---IntegrityError")
-        raise HTTPException(status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        logger.debug(e)
+    except (IntegrityError, Exception) as exc:
+        logger.debug(exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)

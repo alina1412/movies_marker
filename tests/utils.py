@@ -13,5 +13,5 @@ def db_select(session, what, condition):
 
 
 def db_update(session, what, condition, new_data):
-    q = update(*what).where(*condition).values(**new_data)
-    session.execute(q)
+    query = update(*what).where(*condition).values(**new_data)
+    session.execute(query)
