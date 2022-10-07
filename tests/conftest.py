@@ -1,4 +1,5 @@
 from typing import Generator
+
 import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
@@ -10,7 +11,7 @@ from service.db.connection import get_session
 
 
 # Fixture for test client.
-@pytest.fixture(name="client", scope="function")
+@pytest.fixture(name="client", scope="session")
 def fixture_client():
     with TestClient(app) as client:
         yield client
@@ -41,4 +42,3 @@ def fixture_db():
         yield next(get_session())
     except StopIteration:
         ...
-
