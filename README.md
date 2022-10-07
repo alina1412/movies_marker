@@ -7,6 +7,7 @@
 Место хранения данных - Postgres.
 
 Таблицы: user, movie, marks.
+![изображение](https://user-images.githubusercontent.com/8655093/194584977-4761b620-3818-4268-a34b-ad97fcfc1124.png)
 
 
 API сервиса:
