@@ -5,9 +5,9 @@ __pycache__/
 .vscode
 .pytest_cache
 database_data
-alembic.ini
-alembic/*
 migrations/*
 htmlcov/*
 .coverage
 example_*
+alembic_as.ini
+async_migrations/*
