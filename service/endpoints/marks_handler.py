@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 api_router = APIRouter(
-    prefix="/marks",
+    prefix="/v1",
     tags=["marks"],
 )
 

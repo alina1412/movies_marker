@@ -7,11 +7,13 @@ from service.endpoints.utils import AlreadyAddedError, NoUserError
 from service.schemas.marks import MarkInputSchema
 
 
-async def add_movie(session: AsyncSession, title: str):
+async def add_movie(session: AsyncSession, title: str) -> None:
+    if await db_select(session, (Movie.title,), (Movie.title == title,)):
+        raise AlreadyAddedError
     await db_insert(session, Movie, {"title": title})
 
 
-async def add_mark(session: AsyncSession, input_mark: dict):
+async def add_mark(session: AsyncSession, input_mark: dict) -> None:
     input_mark["user"] = str(input_mark["user"]).replace("-", "")
     print(input_mark["user"], "add_mark")
     user_id = await get_user_id(session, input_mark["user"])
@@ -26,7 +28,10 @@ async def add_mark(session: AsyncSession, input_mark: dict):
     await db_insert(session, Marks, input_mark)
 
 
-async def change_mark(session: AsyncSession, input_mark: MarkInputSchema):
+async def change_mark(
+    session: AsyncSession,
+    input_mark: MarkInputSchema,
+) -> None:
     input_mark["user"] = str(input_mark["user"]).replace("-", "")
     user_id = await get_user_id(session, input_mark["user"])
     if not user_id:
@@ -34,12 +39,15 @@ async def change_mark(session: AsyncSession, input_mark: MarkInputSchema):
     await db_update(
         session,
         (Marks,),
-        (Marks.user == input_mark["user"], Marks.movie == input_mark["movie"]),
+        (
+            Marks.user == input_mark["user"],
+            Marks.movie == input_mark["movie"],
+        ),
         {"mark": input_mark["mark"]},
     )
 
 
-async def get_user_id(session: AsyncSession, id_: UUID4):
+async def get_user_id(session: AsyncSession, id_: UUID4) -> str | None:
     res = await db_select(session, (User.id,), (User.id == id_,))
     if not res:
         return None
