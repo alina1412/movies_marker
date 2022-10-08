@@ -12,18 +12,18 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
-# @pytest.mark.my
+@pytest.mark.my
 def test_add_movie(client, db):
-    url = "/api/movie/add-movie"
-    response = client.post(url + "?title=Title1")
+    url = "/api/v1/add-movie"
+    response = client.put(url + "?title=Title1")
     assert response.status_code == 201
-    response = client.post(url + "?title=Title2")
+    response = client.put(url + "?title=Title2")
     assert response.status_code == 201
 
 
 # @pytest.mark.my
 def test_add_movie2(client, db):
-    url = "/api/movie/add-movie"
+    url = "/api/v1/add-movie"
     response = client.post(url + "?title=Title3")
     assert response.status_code == 201
     response = client.post(url + "?title=Title4")
@@ -85,7 +85,7 @@ def test_add_mark1(db, client, input_data, code):
     input_data["user"] = add_or_get_user_id(db, input_data["user"])
 
     # print(str(input_data["movie"]), str(input_data["user"]), "-------")
-    url = "/api/marks/add-mark"
+    url = "/api/v1/add-mark"
     response = client.post(url, json=input_data)
     assert response.status_code == code
     # Repeat
