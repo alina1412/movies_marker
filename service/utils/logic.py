@@ -3,7 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from service.db.crud import db_insert, db_select, db_update
 from service.db.models import Marks, Movie, User
-from service.endpoints.utils import AlreadyAddedError, NoUserError
+from service.endpoints.utils import (AlreadyAddedError, NoMovieError,
+                                     NoUserError)
 from service.schemas.marks import MarkInputSchema
 
 
@@ -15,10 +16,12 @@ async def add_movie(session: AsyncSession, title: str) -> None:
 
 async def add_mark(session: AsyncSession, input_mark: dict) -> None:
     input_mark["user"] = str(input_mark["user"]).replace("-", "")
-    print(input_mark["user"], "add_mark")
+
     user_id = await get_user_id(session, input_mark["user"])
     if not user_id:
         raise NoUserError
+    if not await db_select(session, (Movie.id,), (Movie.id == input_mark["movie"],)):
+        raise NoMovieError
     if await db_select(
         session,
         (Marks.id,),
