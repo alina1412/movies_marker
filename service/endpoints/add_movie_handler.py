@@ -26,6 +26,7 @@ api_router = APIRouter(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_409_CONFLICT: {"description": "This movie had been added already"},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
     },
 )
@@ -35,11 +36,8 @@ async def add_movie_handler(
     session: AsyncSession = Depends(get_session),
 ):
     """Add a unique title"""
-    if not title:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST)
     try:
         await add_movie(session, title)
-        return
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
     except (IntegrityError, Exception) as exc:

@@ -3,8 +3,12 @@ class NoUserError(Exception):
 
 
 class AlreadyAddedError(Exception):
-    detail: str = "mark had been already added"
+    detail: str = "item already exists"
 
 
 class NoMovieError(Exception):
     detail: str = "no such movie"
+
+
+class NoMarkError(Exception):
+    detail: str = "no such mark"

@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from service.db.connection import get_session
-from service.endpoints.utils import (AlreadyAddedError, NoMovieError,
-                                     NoUserError)
+from service.endpoints.utils import (AlreadyAddedError, NoMarkError,
+                                     NoMovieError, NoUserError)
 from service.schemas.marks import MarkInputSchema
 from service.utils.logic import add_mark, change_mark
 
@@ -29,8 +29,9 @@ api_router = APIRouter(
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User or movie not found"},
         status.HTTP_409_CONFLICT: {
-            "description": "This mark had been added, use 'change' method"
+            "description": "Mark to this movie exists already, use 'change' method"
         },
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
     },
 )
@@ -42,10 +43,8 @@ async def add_mark_handler(
     """Add a mark for a movie"""
     try:
         await add_mark(session, input_mark.dict())
-        return
     except (NoUserError, NoMovieError) as exc:
-        logger.debug(exc)
-        raise HTTPException(status.HTTP_404_NOT_FOUND) from exc
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=exc.detail) from exc
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
     except (IntegrityError, Exception) as exc:
@@ -59,6 +58,8 @@ async def add_mark_handler(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User or movie not found"},
+        421: {"detail": NoMarkError.detail},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
     },
 )
@@ -70,10 +71,10 @@ async def change_mark_handler(
     """Change user's existing mark of a movie"""
     try:
         await change_mark(session, input_mark.dict())
-        return
-    except NoUserError:
-        logger.debug("---NoUserError")
-        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    except NoMarkError as exc:
+        raise HTTPException(status_code=421, detail=NoMarkError.detail) from exc
+    except (NoUserError, NoMovieError) as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=exc.detail) from exc
     except (IntegrityError, Exception) as exc:
         logger.debug(exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
