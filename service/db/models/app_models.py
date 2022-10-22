@@ -36,4 +36,4 @@ class Marks(DeclarativeBase):
     mark = Column(Enum(MarkSchema), nullable=False)
 
     def __repr__(self):
-        return f"TestModel(id={self.id}, name={self.name})"
+        return f"Mark({self.mark})"
