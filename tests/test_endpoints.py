@@ -1,28 +1,28 @@
-import json
 import logging
 import uuid
 from uuid import UUID
 
 import pytest
 
+from service.db.crud import db_insert, db_select, db_update
 from service.db.models import Marks, Movie, User
 from service.schemas.marks import MarkSchema
 from tests.utils import (add_or_get_fake_prev_mark, add_or_get_movie_id,
-                         add_or_get_user_id, db_insert, db_select, db_update)
+                         add_or_get_user_id)
 
 
 # @pytest.mark.my
-def test_add_movie(db, client):
+async def test_add_movie(db, client):
     url = "/api/v1/add-movie"
     lst = [("Title1", 201), ("Title2", 201), ("", 422)]
     for title, code in lst:
-        id = db_select(db, (Movie.id,), (Movie.title == title,))
+        id = await db_select(db, (Movie.id,), (Movie.title == title,))
         assert not id
 
         response = client.put(url + f"?title={title}")
         assert response.status_code == code
 
-        id = db_select(db, (Movie.id,), (Movie.title == title,))
+        id = await db_select(db, (Movie.id,), (Movie.title == title,))
         if code == 201:
             assert id
         else:
@@ -126,10 +126,12 @@ list_input = [
     "input_data, code",
     list_input,
 )
-def test_add_mark(db, client, input_data, code):
+async def test_add_mark(db, client, input_data, code):
     if validate_user(input_data) and validate_movie(input_data):
-        input_data["movie"] = add_or_get_movie_id(db, input_data.get("movie", None))
-        input_data["user"] = add_or_get_user_id(db, input_data.get("user", None))
+        input_data["movie"] = await add_or_get_movie_id(
+            db, input_data.get("movie", None)
+        )
+        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
 
     url = "/api/v1/add-mark"
     response = client.post(url, json=input_data)
@@ -154,18 +156,18 @@ list_input = [
         200,
     ),
 ]
-
-
 # @pytest.mark.my
 @pytest.mark.parametrize(
     "input_data, code",
     list_input,
 )
-def test_change_existing_mark(db, client, input_data, code):
+async def test_change_existing_mark(db, client, input_data, code):
     if validate_user(input_data) and validate_movie(input_data):
-        input_data["movie"] = add_or_get_movie_id(db, input_data.get("movie", None))
-        input_data["user"] = add_or_get_user_id(db, input_data.get("user", None))
-        prev_id = add_or_get_fake_prev_mark(db, input_data)
+        input_data["movie"] = await add_or_get_movie_id(
+            db, input_data.get("movie", None)
+        )
+        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
+        prev_id = await add_or_get_fake_prev_mark(db, input_data)
 
     url = "/api/v1/change-mark"
     response = client.post(url, json=input_data)
@@ -183,10 +185,12 @@ def test_change_existing_mark(db, client, input_data, code):
         },
     ],
 )
-def test_change_unexisting_mark(db, client, input_data):
+async def test_change_unexisting_mark(db, client, input_data):
     if validate_user(input_data) and validate_movie(input_data):
-        input_data["movie"] = add_or_get_movie_id(db, input_data.get("movie", None))
-        input_data["user"] = add_or_get_user_id(db, input_data.get("user", None))
+        input_data["movie"] = await add_or_get_movie_id(
+            db, input_data.get("movie", None)
+        )
+        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
     url = "/api/v1/change-mark"
     response = client.post(url, json=input_data)
     assert response.status_code == 421
@@ -203,9 +207,11 @@ def test_change_unexisting_mark(db, client, input_data):
         },
     ],
 )
-def test_change_mark_errors(db, client, input_data):
+async def test_change_mark_errors(db, client, input_data):
     if validate_user(input_data) and validate_movie(input_data):
-        input_data["movie"] = add_or_get_movie_id(db, input_data.get("movie", None))
+        input_data["movie"] = await add_or_get_movie_id(
+            db, input_data.get("movie", None)
+        )
 
     url = "/api/v1/change-mark"
     response = client.post(url, json=input_data)
