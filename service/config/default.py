@@ -16,7 +16,7 @@ class DefaultSettings(BaseSettings):
     LOG_LEVEL: str = "debug"
 
     # Database
-    DATABASE_NAME: str = config("DATABASE_NAME", default="test1", cast=str)
+    DATABASE_NAME: str = config("DATABASE_NAME", cast=str)
     POSTGRES_HOST: str = config("POSTGRES_HOST", default="localhost", cast=str)
     DATABASE_USERNAME: str = config("DATABASE_USERNAME", cast=str)
     DATABASE_PORT: int = config("DATABASE_PORT", cast=int)
