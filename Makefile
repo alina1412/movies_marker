@@ -1,5 +1,5 @@
 run:
-	python -m service
+	poetry run python -m service
 
 renew-sync:
 	alembic -c alembic_s.ini downgrade -1
@@ -43,5 +43,5 @@ lint:
 	isort service tests
 	pylint service
 
-migrate-test-db:
-	poetry run alembic upgrade head
+req:
+	poetry export -f requirements.txt --without-hashes --with dev --output requirements.txt
