@@ -3,8 +3,13 @@ name: project
 on: [push]
 
 env:
-  APP_PORT: 8000
+  APP_PORT: ${{ secrets.APP_PORT }}
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+  DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+  POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
   
 jobs:
   build:
