@@ -7,8 +7,11 @@ import pytest
 from service.db.crud import db_insert, db_select, db_update
 from service.db.models import Marks, Movie, User
 from service.schemas.marks import MarkSchema
-from tests.utils import (add_or_get_fake_prev_mark, add_or_get_movie_id,
-                         add_or_get_user_id)
+from tests.utils import (
+    add_or_get_fake_prev_mark,
+    add_or_get_movie_id,
+    add_or_get_user_id,
+)
 
 
 # @pytest.mark.my
