@@ -5,7 +5,7 @@ from service.db.crud import db_select
 from service.db.models import Marks, Movie, User
 
 
-async def get_user(session: AsyncSession, user_id: UUID4) -> str:
+async def get_user_by_id(session: AsyncSession, user_id: UUID4) -> str:
     id_ = str(user_id).replace("-", "")
     res = await db_select(session, (User.id,), (User.id == id_,))
     if not res:
