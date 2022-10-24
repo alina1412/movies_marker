@@ -25,7 +25,7 @@ jobs:
           Start-Process -FilePath "$env:PGBIN\pg_isready" -Wait -PassThru
       - name: Create user on Windows
         run: |
-          & $env:PGBIN\psql --command="CREATE USER $Env:DATABASE_USERNAME PASSWORD $Env:DATABASE_PASSWORD" --command="\du"
+          & $env:PGBIN\psql --command="CREATE USER $Env:DATABASE_USERNAME WITH SUPERUSER PASSWORD $Env:DATABASE_PASSWORD" --command="\du"
       - name: Create $Env:DATABASE_NAME database
         run: |
           & $env:PGBIN\createdb --owner=$Env:DATABASE_USERNAME $Env:DATABASE_NAME
