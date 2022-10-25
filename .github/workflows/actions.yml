@@ -11,9 +11,9 @@ env:
   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
-DB_HOST: localhost
-DB_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-DB_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DB_HOST: localhost
+  DB_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
 jobs:
   build:
