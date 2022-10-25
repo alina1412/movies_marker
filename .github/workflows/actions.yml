@@ -14,10 +14,8 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: backend
-    
     
     services:
       # Label used to access the service container
@@ -26,8 +24,9 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-        # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
