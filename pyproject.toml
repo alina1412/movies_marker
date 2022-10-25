@@ -14,7 +14,8 @@ alembic = "^1.8.1"
 pydantic = "^1.10.2"
 asyncpg = "^0.26.0"
 uvicorn = "^0.18.3"
-psycopg2 = "^2.9.3"
+psycopg2 = "2.9.4"
+psycopg2-binary = "^2.9.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
