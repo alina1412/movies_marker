@@ -11,6 +11,10 @@ env:
   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
+DB_HOST: localhost
+DB_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+DB_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+
 jobs:
   build:
 
@@ -25,7 +29,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: $DATABASE_PASSWORD
+          POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -33,7 +37,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - $DATABASE_PORT:$DATABASE_PORT
+          - ${{secrets.POSTGRES_PORT}}:${{secrets.POSTGRES_PORT}}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python '3.10'
