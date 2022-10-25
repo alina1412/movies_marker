@@ -16,4 +16,13 @@ services:
     volumes:
       - ./database_data:/var/lib/postgresql/data
       
-
+  app:
+    build: ./service
+    env_file: ./.env
+    environment:
+      DB_HOST: ${DATABASE_NAME}
+      DB_PORT: ${DATABASE_PORT}
+    ports:
+      - ${APP_PORT}:8000
+    depends_on:
+      - database
