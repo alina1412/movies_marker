@@ -9,5 +9,3 @@ migrations/*
 htmlcov/*
 .coverage
 example_*
-alembic_as.ini
-async_migrations/*
