@@ -32,4 +32,4 @@ jobs:
       - run: docker-compose up -d database
       - name: Test with pytest
         run: |
-          poetry run pytest --verbosity=2
+          poetry run pytest tests --verbosity=2
