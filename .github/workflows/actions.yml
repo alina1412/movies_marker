@@ -29,7 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
           pip install -r ./service/requirements.txt
-      - run: docker-compose up -e APP_PORT DATABASE_NAME POSTGRES_HOST DATABASE_USERNAME POSTGRES_PORT DATABASE_PASSWORD DATABASE_PORT -d db
+      - run: cp .env-example .env
+      - run: docker-compose up -d db
       - name: Test with pytest
         run: |
           pytest --verbosity=2

@@ -4,8 +4,7 @@ services:
   database:
     image: 'postgres:latest'
     container_name: 'movies_marker'
-    # env_file:
-    #   - ./.env
+
     environment:
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -18,7 +17,7 @@ services:
       
   app:
     build: ./service
-    # env_file: ./.env
+   
     environment:
       DB_HOST: ${DATABASE_NAME}
       DB_PORT: ${DATABASE_PORT}
