@@ -28,7 +28,15 @@ jobs:
         run: |
           pip install poetry
           poetry install
-      - run: cp .env-example .env
+      - name: Export
+        run: |
+          echo APP_PORT=${{ env.APP_PORT }} >> $GITHUB_ENV
+          echo POSTGRES_DB=${{ env.DATABASE_NAME }} >> $GITHUB_ENV
+          echo POSTGRES_HOST=${{ env.POSTGRES_HOST }} >> $GITHUB_ENV
+          echo POSTGRES_USER=${{ env.DATABASE_USERNAME }} >> $GITHUB_ENV
+          echo POSTGRES_PORT=${{ env.POSTGRES_PORT }} >> $GITHUB_ENV
+          echo POSTGRES_PASSWORD=${{ env.DATABASE_PASSWORD }} >> $GITHUB_ENV
+          echo DATABASE_PORT=${{ env.DATABASE_PORT }} >> $GITHUB_ENV
       - run: docker-compose up -d database
       - name: Test with pytest
         run: |
