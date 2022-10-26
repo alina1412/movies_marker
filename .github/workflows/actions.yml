@@ -37,7 +37,7 @@ jobs:
           echo POSTGRES_PORT=${{ env.POSTGRES_PORT }} >> $GITHUB_ENV
           echo POSTGRES_PASSWORD=${{ env.DATABASE_PASSWORD }} >> $GITHUB_ENV
           echo DATABASE_PORT=${{ env.DATABASE_PORT }} >> $GITHUB_ENV
-      - run: cp .env-example .env
+      # - run: cp .env-example .env
       - run: docker-compose up -d database
       - name: Test with pytest
         run: |
