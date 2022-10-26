@@ -13,7 +13,7 @@ renew-async:
 	alembic -c alembic_as.ini downgrade -1
 	alembic -c alembic_as.ini upgrade head
 
-test-async:
+test:
 	make renew-async
 	pytest -m my --verbosity=2 --showlocals --cov=service --cov-report html
 
