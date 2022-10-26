@@ -30,7 +30,7 @@ jobs:
           pip install pytest
           pip install -r ./service/requirements.txt
       - run: cp .env-example .env
-      - run: docker-compose up -d db
+      - run: docker-compose up -d database
       - name: Test with pytest
         run: |
           pytest --verbosity=2
