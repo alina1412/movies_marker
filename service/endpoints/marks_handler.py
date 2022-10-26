@@ -7,8 +7,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from service.db.connection import get_session
-from service.endpoints.utils import (AlreadyAddedError, NoMarkError,
-                                     NoMovieError, NoUserError)
+from service.endpoints.utils import (
+    AlreadyAddedError,
+    NoMarkError,
+    NoMovieError,
+    NoUserError,
+)
 from service.schemas.marks import MarkInputSchema
 from service.utils.logic import add_mark, change_mark
 

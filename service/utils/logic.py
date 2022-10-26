@@ -2,8 +2,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from service.db.crud import db_insert, db_update
 from service.db.models import Marks, Movie
-from service.endpoints.utils import (AlreadyAddedError, NoMarkError,
-                                     NoMovieError, NoUserError)
+from service.endpoints.utils import (
+    AlreadyAddedError,
+    NoMarkError,
+    NoMovieError,
+    NoUserError,
+)
 from service.utils.helpers import get_user_by_id, is_mark_exists, is_movie_exists
 
 

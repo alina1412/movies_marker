@@ -1,20 +1,19 @@
 import logging
 from uuid import uuid4
-import pytest
 
+import pytest
 from sqlalchemy.exc import DBAPIError
 
 from service.db.crud import db_insert, db_select, db_update
 from service.db.models import Marks, Movie, User
-from service.schemas.marks import MarkSchema
 from service.endpoints.utils import (
     AlreadyAddedError,
     NoMarkError,
     NoMovieError,
     NoUserError,
 )
+from service.schemas.marks import MarkSchema
 from service.utils.logic import add_mark, add_movie, change_mark
-
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
