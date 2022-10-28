@@ -62,7 +62,7 @@ async def add_mark_handler(
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User or movie not found"},
-        421: {"detail": NoMarkError.detail},
+        421: {"description": NoMarkError.detail},
         status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
     },
