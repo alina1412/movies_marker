@@ -1,0 +1,128 @@
+openapi: 3.0.2
+info:
+  title: Backend
+  version: 1.0.0
+paths:
+  /api/v1/add-movie:
+    put:
+      tags:
+        - movie
+      summary: Add Movie Handler
+      description: Add a unique title
+      operationId: add_movie_handler_api_v1_add_movie_put
+      parameters:
+        - required: true
+          schema:
+            title: Title
+            maxLength: 255
+            minLength: 1
+            type: string
+          name: title
+          in: query
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+        '409':
+          description: This movie had been added already
+        '422':
+          description: Not correct request
+        '500':
+          description: Internal server error
+  /api/v1/add-mark:
+    post:
+      tags:
+        - marks
+      summary: Add Mark Handler
+      description: Add a mark for a movie
+      operationId: add_mark_handler_api_v1_add_mark_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarkInputSchema'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+        '404':
+          description: User or movie not found
+        '409':
+          description: Mark to this movie exists already, use 'change' method
+        '422':
+          description: Not correct request
+        '500':
+          description: Internal server error
+  /api/v1/change-mark:
+    post:
+      tags:
+        - marks
+      summary: Change Mark Handler
+      description: Change user's existing mark of a movie
+      operationId: change_mark_handler_api_v1_change_mark_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarkInputSchema'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+        '404':
+          description: User or movie not found
+        '421':
+          description: No such mark
+        '422':
+          description: Not correct request
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    MarkInputSchema:
+      title: MarkInputSchema
+      required:
+        - user
+        - movie
+        - mark
+      type: object
+      properties:
+        user:
+          title: User
+          type: string
+          description: user_id
+          format: uuid4
+          example: 5f61e121-1fce-450c-a4be-9e149ddfb259
+        movie:
+          title: Movie
+          type: integer
+          example: 1
+        mark:
+          allOf:
+            - $ref: '#/components/schemas/MarkSchema'
+          description: mark of the movie
+          example: AWESOME
+    MarkSchema:
+      title: MarkSchema
+      enum:
+        - AWESOME
+        - GREAT
+        - GOOD
+        - NOT_BAD
+        - BAD
+      type: string
+      description: An enumeration.
