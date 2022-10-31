@@ -21,6 +21,7 @@ services:
     environment:
       DB_HOST: ${DATABASE_NAME}
       DB_PORT: ${POSTGRES_PORT}
+      APP_PORT: ${APP_PORT}
     ports:
       - ${APP_PORT}:8000
     depends_on:
