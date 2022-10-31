@@ -9,7 +9,6 @@ env:
   DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
   POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
 
 jobs:
@@ -36,7 +35,7 @@ jobs:
           echo POSTGRES_USER=${{ env.DATABASE_USERNAME }} >> $GITHUB_ENV
           echo POSTGRES_PORT=${{ env.POSTGRES_PORT }} >> $GITHUB_ENV
           echo POSTGRES_PASSWORD=${{ env.DATABASE_PASSWORD }} >> $GITHUB_ENV
-          echo DATABASE_PORT=${{ env.DATABASE_PORT }} >> $GITHUB_ENV
+
       - run: docker-compose up -d database
       - name: Test with pytest
         run: |
