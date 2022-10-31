@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DATABASE_NAME}
     ports:
-      - ${DATABASE_PORT}:${DATABASE_PORT}
+      - ${POSTGRES_PORT}:5432
   
     volumes:
       - ./database_data:/var/lib/postgresql/data
@@ -20,7 +20,7 @@ services:
    
     environment:
       DB_HOST: ${DATABASE_NAME}
-      DB_PORT: ${DATABASE_PORT}
+      DB_PORT: ${POSTGRES_PORT}
     ports:
       - ${APP_PORT}:8000
     depends_on:
