@@ -18,7 +18,7 @@ settingenv = Config(".env")
 DATABASE_NAME: str = settingenv("DATABASE_NAME", default="test1", cast=str)
 POSTGRES_HOST: str = settingenv("POSTGRES_HOST", default="localhost", cast=str)
 DATABASE_USERNAME: str = settingenv("DATABASE_USERNAME", cast=str)
-DATABASE_PORT: int = settingenv("DATABASE_PORT", cast=str)
+POSTGRES_PORT: int = settingenv("POSTGRES_PORT", cast=str)
 DATABASE_PASSWORD: str = settingenv("DATABASE_PASSWORD", cast=str)
 
 config = context.config
@@ -27,7 +27,7 @@ section = config.config_ini_section
 config.set_section_option(section, "DATABASE_USERNAME", DATABASE_USERNAME)
 config.set_section_option(section, "DATABASE_PASSWORD", DATABASE_PASSWORD)
 config.set_section_option(section, "POSTGRES_HOST", POSTGRES_HOST)
-config.set_section_option(section, "DATABASE_PORT", DATABASE_PORT)
+config.set_section_option(section, "POSTGRES_PORT", POSTGRES_PORT)
 config.set_section_option(section, "DATABASE_NAME", DATABASE_NAME)
 
 # Interpret the config file for Python logging.

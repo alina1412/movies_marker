@@ -19,7 +19,7 @@ class DefaultSettings(BaseSettings):
     DATABASE_NAME: str = config("DATABASE_NAME", cast=str)
     POSTGRES_HOST: str = config("POSTGRES_HOST", default="localhost", cast=str)
     DATABASE_USERNAME: str = config("DATABASE_USERNAME", cast=str)
-    DATABASE_PORT: int = config("DATABASE_PORT", cast=int)
+    POSTGRES_PORT: int = config("POSTGRES_PORT", cast=int)
     DATABASE_PASSWORD: str = config("DATABASE_PASSWORD", cast=str)
     DB_CONNECT_RETRY: int = config("DB_CONNECT_RETRY", default=20, cast=str)
     DB_POOL_SIZE: int = config("DB_POOL_SIZE", default=15, cast=str)
@@ -29,7 +29,7 @@ class DefaultSettings(BaseSettings):
         """Return the database URL."""
         return (
             f"postgresql+asyncpg://{self.DATABASE_USERNAME}:{self.DATABASE_PASSWORD}"
-            f"@{self.POSTGRES_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.DATABASE_NAME}"
         )
 
     @property
@@ -37,5 +37,5 @@ class DefaultSettings(BaseSettings):
         """Return the database URL."""
         return (
             f"postgresql://{self.DATABASE_USERNAME}:{self.DATABASE_PASSWORD}"
-            f"@{self.POSTGRES_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.DATABASE_NAME}"
         )
