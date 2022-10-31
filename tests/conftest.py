@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any, Generator
 
 import dotenv
 import pytest
@@ -20,7 +21,7 @@ logging.getLogger("faker").setLevel(logging.ERROR)
 dotenv.load_dotenv()
 
 
-def run_alembic(uri_test):
+def run_alembic_up(uri_test) -> None:
     alembic_config = AlembicConfig(file_="alembic_as.ini")
     try:
         alembic_downgrade(alembic_config, "base")
@@ -30,29 +31,44 @@ def run_alembic(uri_test):
     alembic_upgrade(alembic_config, "head")
 
 
-@pytest.fixture(name="change_db", scope="session")
-def changes_for_test_db():
-    os.environ["DATABASE_NAME"] = "pytest1"
-    uri_test = DBManager().uri
+def run_alembic_down() -> None:
+    DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+    if not DEBUG:
+        alembic_config = AlembicConfig(file_="alembic_as.ini")
+        alembic_downgrade(alembic_config, "base")
 
+
+def make_test_db() -> None:
     sync_uri = DefaultSettings().sync_database_uri
     if not database_exists(sync_uri):
         create_database(sync_uri)
-    run_alembic(uri_test)
 
+
+def drop_test_db() -> None:
+    DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+    if not DEBUG:
+        sync_uri = DefaultSettings().sync_database_uri
+        drop_database(sync_uri)
+
+
+@pytest.fixture(scope="session")
+def get_test_db_uri() -> Generator[str, Any, Any]:
+    os.environ["DATABASE_NAME"] = "pytest1"
+    uri_test = DBManager().uri
+    make_test_db()
+    run_alembic_up(uri_test)
     yield uri_test
-    # alembic_config = AlembicConfig(file_="alembic_as.ini")
-    # alembic_downgrade(alembic_config, "base")
+    run_alembic_down()
+    drop_test_db()
 
 
 @pytest_asyncio.fixture(name="db", scope="function")
-async def get_test_session(change_db):
-    uri_test = change_db
+async def get_test_session(get_test_db_uri) -> Generator[sessionmaker, None, None]:
+    uri_test = get_test_db_uri
     engine = create_async_engine(uri_test, echo=True, future=True)
     session_maker = sessionmaker(
         engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
     )
-
     async with session_maker() as session:
         try:
             yield session
@@ -66,6 +82,6 @@ async def get_test_session(change_db):
 
 # Fixture for test client.
 @pytest.fixture(name="client", scope="session")
-def fixture_client():
+def fixture_client() -> TestClient:
     with TestClient(app) as client:
         yield client
