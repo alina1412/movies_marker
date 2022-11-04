@@ -3,7 +3,7 @@ services:
 
   database:
     image: 'postgres:latest'
-    container_name: 'movies_marker'
+    container_name: 'movies_marker_db'
 
     environment:
       - POSTGRES_USER=${DATABASE_USERNAME}
@@ -15,14 +15,15 @@ services:
     volumes:
       - ./database_data:/var/lib/postgresql/data
       
-  app:
-    build: ./service
+  # app:
+  #   container_name: ${DOCKER_APP_NAME}
+  #   build: ./service
    
-    environment:
-      DB_HOST: ${DATABASE_NAME}
-      DB_PORT: ${POSTGRES_PORT}
-      APP_PORT: ${APP_PORT}
-    ports:
-      - ${APP_PORT}:8000
-    depends_on:
-      - database
+  #   environment:
+  #     DB_HOST: ${DATABASE_NAME}
+  #     DB_PORT: ${POSTGRES_PORT}
+  #     APP_PORT: ${APP_PORT}
+  #   ports:
+  #     - ${APP_PORT}:8000
+  #   depends_on:
+  #     - database
