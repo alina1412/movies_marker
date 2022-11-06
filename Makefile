@@ -1,3 +1,20 @@
+alembic_up = make async-alembic-up
+
+ifdef OS
+	docker_up = docker compose up -d
+	docker_down = docker compose down
+else
+	docker_up = sudo docker-compose up -d
+	docker_down = sudo docker-compose down
+endif
+
+up:
+	$(docker_up) 
+	$(alembic_up)
+
+down:
+	$(docker_down)
+
 run:
 	poetry run python -m service
 
@@ -26,13 +43,6 @@ async-alembic-up:
 
 async-alembic-down:
 	poetry run alembic -c alembic_as.ini downgrade -1
-
-up:
-	docker compose up -d
-	make async-alembic-up
-
-down:
-	docker compose down
 
 lint:
 	poetry run isort service tests
