@@ -32,7 +32,7 @@ def run_alembic_up(uri_test) -> None:
 
 
 def run_alembic_down() -> None:
-    DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+    DEBUG = os.getenv("DEBUG", "False") == "True"
     if not DEBUG:
         alembic_config = AlembicConfig(file_="alembic_as.ini")
         alembic_downgrade(alembic_config, "base")
@@ -45,7 +45,7 @@ def make_test_db() -> None:
 
 
 def drop_test_db() -> None:
-    DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+    DEBUG = os.getenv("DEBUG", "False") == "True"
     if not DEBUG:
         sync_uri = DefaultSettings().sync_database_uri
         drop_database(sync_uri)
