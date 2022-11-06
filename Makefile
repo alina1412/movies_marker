@@ -2,7 +2,7 @@ alembic_up = make async-alembic-up
 
 ifdef OS
 	docker_up = docker compose up -d
-	docker_down = docker compose down
+	docker_down = docker compose down --volumes
 else
 	docker_up = sudo docker-compose up -d
 	docker_down = sudo docker-compose down
