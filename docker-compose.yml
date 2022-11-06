@@ -13,7 +13,7 @@ services:
       - ${POSTGRES_PORT}:5432
   
     volumes:
-      - ./database_data:/var/lib/postgresql/data
+      - ./.database_data:/var/lib/postgresql/data
       
   # app:
   #   container_name: ${DOCKER_APP_NAME}
