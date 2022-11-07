@@ -11,19 +11,22 @@ services:
       - POSTGRES_DB=${DATABASE_NAME}
     ports:
       - ${POSTGRES_PORT}:5432
-  
+
     volumes:
       - ./.database_data:/var/lib/postgresql/data
-      
-  # app:
-  #   container_name: ${DOCKER_APP_NAME}
-  #   build: ./service
-   
-  #   environment:
-  #     DB_HOST: ${DATABASE_NAME}
-  #     DB_PORT: ${POSTGRES_PORT}
-  #     APP_PORT: ${APP_PORT}
-  #   ports:
-  #     - ${APP_PORT}:8000
-  #   depends_on:
-  #     - database
+
+  app:
+    container_name: ${DOCKER_APP_NAME}
+    build: ./service
+
+    environment:
+      - POSTGRES_HOST=database
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - POSTGRES_PORT=5432
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - APP_PORT=${APP_PORT}
+    ports:
+      - 8765:${APP_PORT}
+    depends_on:
+      - database
