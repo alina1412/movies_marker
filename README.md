@@ -3,12 +3,18 @@
 ## Описание
 Учебный проект на FastApi, посвященный хранению пользовательских оценок фильмов. 
 
-
-Место хранения данных - Postgres
-
-Миграции - alembic
-
-Тестирование - pytest
+## Инструменты, технологии
+- FastApi фреймворк
+- Место хранения данных - Postgres
+- Миграции - alembic
+- Тестирование - pytest
+- sqlalchemy
+- pydantic
+- asyncio
+- docker-compose
+- makefile
+- poetry
+- github actions
 
 
 Таблицы: user, movie, marks.
@@ -21,6 +27,12 @@ API сервиса:
 - добавление новой оценки фильму,
 
 - изменение поставленной оценки.
+
+## Makefile
+- `make up`: запускает docker-compose и миграции
+- `make run`: запускает FastApi приложение 
+- `make test`: запускает тесты
+- `make down`: останавливает контейнеры
 
 
 ![изображение](https://user-images.githubusercontent.com/8655093/197354013-5aec7b62-8e9d-46ef-9c06-9a85171d683d.png)
