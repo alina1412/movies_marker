@@ -10,8 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from alembic.command import downgrade as alembic_downgrade
-from alembic.command import upgrade as alembic_upgrade
+from alembic.command import (
+    downgrade as alembic_downgrade,
+    upgrade as alembic_upgrade,
+)
 from alembic.config import Config as AlembicConfig
 from service.__main__ import app
 from service.config.default import DefaultSettings
@@ -63,7 +65,9 @@ def get_test_db_uri() -> Generator[str, Any, Any]:
 
 
 @pytest_asyncio.fixture(name="db", scope="function")
-async def get_test_session(get_test_db_uri) -> Generator[sessionmaker, None, None]:
+async def get_test_session(
+    get_test_db_uri,
+) -> Generator[sessionmaker, None, None]:
     uri_test = get_test_db_uri
     engine = create_async_engine(uri_test, echo=True, future=True)
     session_maker = sessionmaker(

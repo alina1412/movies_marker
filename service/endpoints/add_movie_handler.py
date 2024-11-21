@@ -6,13 +6,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from service.config.default import logger
 from service.db.connection import get_session
 from service.endpoints.utils import AlreadyAddedError
 from service.utils.logic import add_movie
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
 
 api_router = APIRouter(
     prefix="/v1",
@@ -25,9 +22,15 @@ api_router = APIRouter(
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
-        status.HTTP_409_CONFLICT: {"description": "This movie had been added already"},
-        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
+        status.HTTP_409_CONFLICT: {
+            "description": "This movie had been added already"
+        },
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
+            "description": "Not correct request"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal server error"
+        },
     },
 )
 async def add_movie_handler(

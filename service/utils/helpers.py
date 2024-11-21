@@ -20,7 +20,9 @@ async def is_movie_exists(session: AsyncSession, condition) -> bool:
     return False
 
 
-async def is_mark_exists(session: AsyncSession, user_id: str, movie_id: int) -> bool:
+async def is_mark_exists(
+    session: AsyncSession, user_id: str, movie_id: int
+) -> bool:
     if await db_select(
         session,
         (Marks.id,),

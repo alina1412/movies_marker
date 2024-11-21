@@ -8,7 +8,11 @@ from service.endpoints.utils import (
     NoMovieError,
     NoUserError,
 )
-from service.utils.helpers import get_user_by_id, is_mark_exists, is_movie_exists
+from service.utils.helpers import (
+    get_user_by_id,
+    is_mark_exists,
+    is_movie_exists,
+)
 
 
 async def add_movie(session: AsyncSession, title: str) -> None:
@@ -18,7 +22,9 @@ async def add_movie(session: AsyncSession, title: str) -> None:
 
 
 async def add_mark(session: AsyncSession, input_mark: dict) -> None:
-    input_mark["user"] = user_id = await get_user_by_id(session, input_mark["user"])
+    input_mark["user"] = user_id = await get_user_by_id(
+        session, input_mark["user"]
+    )
     if not user_id:
         raise NoUserError
     if not await is_movie_exists(session, (Movie.id == input_mark["movie"],)):
