@@ -22,5 +22,5 @@ async def db_update(session: AsyncSession, what, condition, new_data) -> None:
         await session.execute(stmt)
         # await session.commit()
     except Exception as exc:
-        logger.debug("error", exc_info=exc)
+        logger.error("error", exc_info=exc)
         await session.rollback()
