@@ -1,5 +1,3 @@
-import logging
-
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -44,5 +42,5 @@ async def add_movie_handler(
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
     except (IntegrityError, Exception) as exc:
-        logger.debug(exc)
+        logger.error(exc_info=exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
