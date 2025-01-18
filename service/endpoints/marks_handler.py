@@ -1,5 +1,3 @@
-import logging
-
 from fastapi import APIRouter, Depends, Request
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -56,7 +54,7 @@ async def add_mark_handler(
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
     except (IntegrityError, Exception) as exc:
-        logger.debug(exc)
+        logger.error(exc_info=exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
 
@@ -90,5 +88,5 @@ async def change_mark_handler(
             status.HTTP_404_NOT_FOUND, detail=exc.detail
         ) from exc
     except (IntegrityError, Exception) as exc:
-        logger.debug(exc)
+        logger.error(exc_info=exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
