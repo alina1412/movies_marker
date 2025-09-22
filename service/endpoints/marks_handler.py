@@ -1,11 +1,10 @@
-import logging
-
 from fastapi import APIRouter, Depends, Request
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from service.config.default import logger
 from service.db.connection import get_session
 from service.endpoints.utils import (
     AlreadyAddedError,
@@ -15,10 +14,6 @@ from service.endpoints.utils import (
 )
 from service.schemas.marks import MarkInputSchema
 from service.utils.logic import add_mark, change_mark
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
 
 api_router = APIRouter(
     prefix="/v1",
@@ -33,10 +28,15 @@ api_router = APIRouter(
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User or movie not found"},
         status.HTTP_409_CONFLICT: {
-            "description": "Mark to this movie exists already, use 'change' method"
+            "description": """Mark to this movie exists already,
+              use 'change' method"""
         },
-        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
+            "description": "Not correct request"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal server error"
+        },
     },
 )
 async def add_mark_handler(
@@ -48,11 +48,13 @@ async def add_mark_handler(
     try:
         await add_mark(session, input_mark.dict())
     except (NoUserError, NoMovieError) as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=exc.detail) from exc
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND, detail=exc.detail
+        ) from exc
     except AlreadyAddedError as exc:
         raise HTTPException(status.HTTP_409_CONFLICT) from exc
     except (IntegrityError, Exception) as exc:
-        logger.debug(exc)
+        logger.error(exc_info=exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
 
@@ -63,8 +65,12 @@ async def add_mark_handler(
         status.HTTP_400_BAD_REQUEST: {"description": "Bad request"},
         status.HTTP_404_NOT_FOUND: {"description": "User or movie not found"},
         421: {"description": NoMarkError.detail},
-        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Not correct request"},
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal server error"},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {
+            "description": "Not correct request"
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal server error"
+        },
     },
 )
 async def change_mark_handler(
@@ -78,7 +84,9 @@ async def change_mark_handler(
     except NoMarkError as exc:
         raise HTTPException(status_code=421, detail=NoMarkError.detail) from exc
     except (NoUserError, NoMovieError) as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=exc.detail) from exc
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND, detail=exc.detail
+        ) from exc
     except (IntegrityError, Exception) as exc:
-        logger.debug(exc)
+        logger.error(exc_info=exc)
         raise HTTPException(status.HTTP_400_BAD_REQUEST)

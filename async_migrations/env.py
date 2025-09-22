@@ -38,6 +38,7 @@ if config.config_file_name is not None:
 
 from service.db import metadata
 from service.db.models import User, Marks, Movie
+
 target_metadata = metadata
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

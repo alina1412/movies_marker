@@ -134,7 +134,9 @@ async def test_add_mark(db, client, input_data, code):
         input_data["movie"] = await add_or_get_movie_id(
             db, input_data.get("movie", None)
         )
-        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
+        input_data["user"] = await add_or_get_user_id(
+            db, input_data.get("user", None)
+        )
 
     url = "/api/v1/add-mark"
     response = client.post(url, json=input_data)
@@ -159,6 +161,8 @@ list_input = [
         200,
     ),
 ]
+
+
 # @pytest.mark.my
 @pytest.mark.parametrize(
     "input_data, code",
@@ -169,7 +173,9 @@ async def test_change_existing_mark(db, client, input_data, code):
         input_data["movie"] = await add_or_get_movie_id(
             db, input_data.get("movie", None)
         )
-        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
+        input_data["user"] = await add_or_get_user_id(
+            db, input_data.get("user", None)
+        )
         prev_id = await add_or_get_fake_prev_mark(db, input_data)
 
     url = "/api/v1/change-mark"
@@ -193,7 +199,9 @@ async def test_change_unexisting_mark(db, client, input_data):
         input_data["movie"] = await add_or_get_movie_id(
             db, input_data.get("movie", None)
         )
-        input_data["user"] = await add_or_get_user_id(db, input_data.get("user", None))
+        input_data["user"] = await add_or_get_user_id(
+            db, input_data.get("user", None)
+        )
     url = "/api/v1/change-mark"
     response = client.post(url, json=input_data)
     assert response.status_code == 421

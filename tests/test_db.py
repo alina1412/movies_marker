@@ -7,7 +7,9 @@ from service.schemas.marks import MarkSchema
 
 async def add_example_user(session, user_data):
     await db_insert(session, User, user_data)
-    res = await db_select(session, (User.id,), (User.name == user_data["name"],))
+    res = await db_select(
+        session, (User.id,), (User.name == user_data["name"],)
+    )
     assert res != []
     user_id = res[0][0]
     return user_id
@@ -15,7 +17,9 @@ async def add_example_user(session, user_data):
 
 async def add_example_movie(session, movie_data):
     await db_insert(session, Movie, movie_data)
-    res = await db_select(session, (Movie.id,), (Movie.title == movie_data["title"],))
+    res = await db_select(
+        session, (Movie.id,), (Movie.title == movie_data["title"],)
+    )
     assert res != []
     movie_id = res[0][0]
     return movie_id
@@ -46,7 +50,9 @@ async def test_db(db):
         await db.rollback()
         raise exc
 
-    await db_update(db, (User,), (User.name == user_data["name"],), {"name": "user2"})
+    await db_update(
+        db, (User,), (User.name == user_data["name"],), {"name": "user2"}
+    )
     await db.commit()
 
     res = await db_select(db, (User.name,), (User.name == "user2",))

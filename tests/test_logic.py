@@ -27,7 +27,9 @@ class TestAddMovieFunc:
     async def test_add_new(self, db):
         await add_movie(db, self.title)
         await db.commit()
-        titles = await db_select(db, (Movie.title,), (Movie.title == self.title,))
+        titles = await db_select(
+            db, (Movie.title,), (Movie.title == self.title,)
+        )
         assert len(titles) == 1
         title = titles[0][0]
         assert title == self.title
@@ -56,7 +58,9 @@ class TestAddMarkFunc:
         await db_insert(db, Movie, {"title": self.input["movie_exists"]})
         await db.commit()
         user_id = (
-            await db_select(db, (User.id,), (User.name == self.input["user_exists"],))
+            await db_select(
+                db, (User.id,), (User.name == self.input["user_exists"],)
+            )
         )[0][0]
         movie_id = (
             await db_select(
@@ -73,7 +77,9 @@ class TestAddMarkFunc:
 
     async def test_add_no_movie(self, db):
         user_id = (
-            await db_select(db, (User.id,), (User.name == self.input["user_exists"],))
+            await db_select(
+                db, (User.id,), (User.name == self.input["user_exists"],)
+            )
         )[0][0]
         input_mark = {
             "user": user_id,
@@ -115,7 +121,9 @@ class TestAddMarkFunc:
         finally:
             movie_id = (
                 await db_select(
-                    db, (Movie.id,), (Movie.title == self.input["movie_exists"],)
+                    db,
+                    (Movie.id,),
+                    (Movie.title == self.input["movie_exists"],),
                 )
             )[0][0]
 
@@ -151,7 +159,9 @@ class TestAddMarkFunc:
             await db.rollback()
         finally:
             user_id = (
-                await db_select(db, (User.id,), (User.name == "test_add_incorrect",))
+                await db_select(
+                    db, (User.id,), (User.name == "test_add_incorrect",)
+                )
             )[0][0]
 
         try:
@@ -162,7 +172,9 @@ class TestAddMarkFunc:
         finally:
             movie_id = (
                 await db_select(
-                    db, (Movie.id,), (Movie.title == self.input["movie_exists"],)
+                    db,
+                    (Movie.id,),
+                    (Movie.title == self.input["movie_exists"],),
                 )
             )[0][0]
 
@@ -210,7 +222,9 @@ class TestChangeMarkFunc:
         finally:
             movie_id = (
                 await db_select(
-                    db, (Movie.id,), (Movie.title == self.input["movie_exists"],)
+                    db,
+                    (Movie.id,),
+                    (Movie.title == self.input["movie_exists"],),
                 )
             )[0][0]
 
@@ -258,7 +272,9 @@ class TestChangeMarkFunc:
         finally:
             movie_id = (
                 await db_select(
-                    db, (Movie.id,), (Movie.title == self.input["movie_exists"],)
+                    db,
+                    (Movie.id,),
+                    (Movie.title == self.input["movie_exists"],),
                 )
             )[0][0]
             await db.commit()

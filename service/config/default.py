@@ -1,5 +1,11 @@
+import logging
+
 from pydantic import BaseSettings
 from starlette.config import Config
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
 
 config = Config(".env")
 

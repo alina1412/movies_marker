@@ -1,6 +1,8 @@
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from service.config.default import logger
+
 
 async def db_insert(session: AsyncSession, model, dict_data) -> None:
     query = insert(model).values(**dict_data)
@@ -20,5 +22,5 @@ async def db_update(session: AsyncSession, what, condition, new_data) -> None:
         await session.execute(stmt)
         # await session.commit()
     except Exception as exc:
-        print(exc)
+        logger.error("error", exc_info=exc)
         await session.rollback()
